@@ -22,6 +22,7 @@
 #import "UILabelViewController.h"
 #import "UISliderViewController.h"
 #import "UITextFieldViewController.h"
+#import "UITextFieldWithControlsViewController.h"
 #import "UIViewViewController.h"
 #import "CustomTextControlViewController.h"
 #import "MiscellaneousViewController.h"
@@ -49,6 +50,10 @@
 
     // UITextField
     [self addMenuItemViewController:[[UITextFieldViewController alloc] init] andTitle:@"UITextField"];
+
+    // UITextField with controls
+    [self addMenuItemViewController:[[UITextFieldWithControlsViewController alloc] init]
+                           andTitle:@"UITextField with controls to change behavior and visual appearance"];
 
     // UIViewViewController
     [self addMenuItemViewController:[[UIViewViewController alloc] init] andTitle:@"UIView"];
