@@ -2,28 +2,28 @@
 <Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Common">
-      <UniqueIdentifier>{d76a9b7b-b5a4-4c53-a5fd-2b27521321c5}</UniqueIdentifier>
+      <UniqueIdentifier>{d9c19430-7ebd-427f-932a-7d4a6c309ec6}</UniqueIdentifier>
     </Filter>
     <Filter Include="Assets">
-      <UniqueIdentifier>{d267b6ba-d37a-47b6-aedf-4bc0102d99a7}</UniqueIdentifier>
+      <UniqueIdentifier>{7a2b10ae-a0dc-46af-94d3-28a09a956c93}</UniqueIdentifier>
     </Filter>
     <Filter Include="Images">
-      <UniqueIdentifier>{7ABC620C-0579-4228-A19D-6ECB213EC019}</UniqueIdentifier>
+      <UniqueIdentifier>{4D0703C9-C270-4F8F-A0F3-2FBF89649139}</UniqueIdentifier>
     </Filter>
     <Filter Include="XAMLCatalog">
-      <UniqueIdentifier>{2E4E4A68-D2F8-4771-B53F-0BCBF01DF04E}</UniqueIdentifier>
+      <UniqueIdentifier>{3C67ABE0-7490-42BD-A38F-12BEDFF6AD93}</UniqueIdentifier>
     </Filter>
     <Filter Include="XAMLCatalog\Supporting Files">
-      <UniqueIdentifier>{6BEFFDB1-5403-4240-B9D9-EC5A0823DD15}</UniqueIdentifier>
+      <UniqueIdentifier>{D1262DBD-A46B-4927-9634-6CD933699309}</UniqueIdentifier>
     </Filter>
     <Filter Include="XAMLCatalog\UIKitControls">
-      <UniqueIdentifier>{26110A8D-9A20-4B21-8767-25180C0F2E94}</UniqueIdentifier>
+      <UniqueIdentifier>{558D11C4-CEEB-49F1-A961-7954A330147E}</UniqueIdentifier>
     </Filter>
     <Filter Include="XAMLCatalog\XamlControls">
-      <UniqueIdentifier>{2893A9F9-BBAE-4368-BBB3-6DE81541B4F2}</UniqueIdentifier>
+      <UniqueIdentifier>{2F63B5F9-1A3E-418F-B2F8-672CCF24A13C}</UniqueIdentifier>
     </Filter>
     <Filter Include="Xcode Variable Files">
-      <UniqueIdentifier>{A3877577-57D9-47AC-83BE-6D675B72821B}</UniqueIdentifier>
+      <UniqueIdentifier>{6418AE56-9CB1-4B97-8CCC-006669F77F6F}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -93,6 +93,9 @@
     <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UITextFieldViewController.h">
       <Filter>XAMLCatalog\UIKitControls</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UITextFieldWithControlsViewController.h">
+      <Filter>XAMLCatalog\UIKitControls</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UIViewViewController.h">
       <Filter>XAMLCatalog\UIKitControls</Filter>
     </ClInclude>
@@ -133,6 +136,9 @@
       <Filter>XAMLCatalog\UIKitControls</Filter>
     </ClangCompile>
     <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UITextFieldViewController.m">
+      <Filter>XAMLCatalog\UIKitControls</Filter>
+    </ClangCompile>
+    <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UITextFieldWithControlsViewController.m">
       <Filter>XAMLCatalog\UIKitControls</Filter>
     </ClangCompile>
     <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UIViewViewController.m">

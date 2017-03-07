@@ -29,7 +29,7 @@
     <WindowsTargetPlatformVersion>10.0.14393.0</WindowsTargetPlatformVersion>
     <WindowsTargetPlatformMinVersion>10.0.10586.0</WindowsTargetPlatformMinVersion>
     <Keyword>IslandwoodProj</Keyword>
-    <ProjectGuid>{D676667D-C435-43AE-A596-180EC6F15F0B}</ProjectGuid>
+    <ProjectGuid>{E56DD18A-AC5F-4C6A-8D37-1F63A16A3347}</ProjectGuid>
     <RootNamespace>XAMLCatalog</RootNamespace>
     <WINOBJC_SDK_ROOT Condition="'$(WINOBJC_SDK_ROOT)' == ''">..\..\..\..</WINOBJC_SDK_ROOT>
   </PropertyGroup>
@@ -92,7 +92,7 @@
       <HeaderMap>Project</HeaderMap>
       <IncludePaths>$(SolutionPublicHeadersDir)</IncludePaths>
       <ObjectiveCARC>true</ObjectiveCARC>
-      <ObjectiveCModules>false</ObjectiveCModules>
+      <ObjectiveCModules>true</ObjectiveCModules>
       <OptimizationLevel>Disabled</OptimizationLevel>
       <PreprocessorDefinitions>DEBUG=1</PreprocessorDefinitions>
     </ClangCompile>
@@ -116,7 +116,7 @@
       <HeaderMap>Project</HeaderMap>
       <IncludePaths>$(SolutionPublicHeadersDir)</IncludePaths>
       <ObjectiveCARC>true</ObjectiveCARC>
-      <ObjectiveCModules>false</ObjectiveCModules>
+      <ObjectiveCModules>true</ObjectiveCModules>
       <OptimizationLevel>Disabled</OptimizationLevel>
       <PreprocessorDefinitions>DEBUG=1</PreprocessorDefinitions>
     </ClangCompile>
@@ -138,7 +138,7 @@
       <HeaderMap>Project</HeaderMap>
       <IncludePaths>$(SolutionPublicHeadersDir)</IncludePaths>
       <ObjectiveCARC>true</ObjectiveCARC>
-      <ObjectiveCModules>false</ObjectiveCModules>
+      <ObjectiveCModules>true</ObjectiveCModules>
       <OptimizationLevel>MinSpace</OptimizationLevel>
     </ClangCompile>
     <Link>
@@ -159,7 +159,7 @@
       <HeaderMap>Project</HeaderMap>
       <IncludePaths>$(SolutionPublicHeadersDir)</IncludePaths>
       <ObjectiveCARC>true</ObjectiveCARC>
-      <ObjectiveCModules>false</ObjectiveCModules>
+      <ObjectiveCModules>true</ObjectiveCModules>
       <OptimizationLevel>MinSpace</OptimizationLevel>
     </ClangCompile>
     <Link>
@@ -202,6 +202,7 @@
     <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UILabelViewController.h" />
     <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UISliderViewController.h" />
     <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UITextFieldViewController.h" />
+    <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UITextFieldWithControlsViewController.h" />
     <ClInclude Include="..\..\XAMLCatalog\UIKitControls\UIViewViewController.h" />
     <ClangCompile Include="..\..\XAMLCatalog\AppDelegate.m" />
     <ClangCompile Include="..\..\XAMLCatalog\CustomTextControlViewController.m" />
@@ -216,6 +217,7 @@
     <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UILabelViewController.m" />
     <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UISliderViewController.m" />
     <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UITextFieldViewController.m" />
+    <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UITextFieldWithControlsViewController.m" />
     <ClangCompile Include="..\..\XAMLCatalog\UIKitControls\UIViewViewController.m" />
     <ClangCompile Include="..\..\XAMLCatalog\main.m" />
     <SBInfoPlistCopy Include="..\..\XAMLCatalog\Info.plist">

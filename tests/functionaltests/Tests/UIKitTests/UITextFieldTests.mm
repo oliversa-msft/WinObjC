@@ -30,16 +30,16 @@
 #include "ObjCXamlControls.h"
 #import "UWP/WindowsUIXamlControls.h"
 
-class UIKitTextFieldTests {
+class UITextFieldTests {
 public:
-    BEGIN_TEST_CLASS(UIKitTextFieldTests)
+    BEGIN_TEST_CLASS(UITextFieldTests)
     END_TEST_CLASS()
 
-    TEST_CLASS_SETUP(UIKitTestsSetup) {
+    TEST_CLASS_SETUP(UITextFieldTestsSetup) {
         return FunctionalTestSetupUIApplication();
     }
 
-    TEST_CLASS_CLEANUP(UIKitTestsCleanup) {
+    TEST_CLASS_CLEANUP(UITextFieldTestsCleanup) {
         return FunctionalTestCleanupUIApplication();
     }
 
@@ -60,6 +60,20 @@ public:
 
             // TODO: Fix up when UITextField moves fully to XAML
             ASSERT_TRUE([backingElement isKindOfClass:[WXFrameworkElement class]]);
+        });
+    }
+
+    TEST_METHOD(CheckWXCTextBlock) {
+        StrongId<WXCTextBlock> textBlock = [WXCTextBlock make];
+
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            [textBlock setText:@""];
+        });
+
+        [NSThread sleepForTimeInterval:.25];
+
+        dispatch_sync(dispatch_get_main_queue(), ^{
+            EXPECT_OBJCEQ([textBlock text], @"");
         });
     }
 };
