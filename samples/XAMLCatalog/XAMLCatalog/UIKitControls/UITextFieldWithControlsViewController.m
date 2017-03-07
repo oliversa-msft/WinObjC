@@ -90,14 +90,17 @@ static const int TAG_SUBVIEW_UITEXTFIELD = 1;
     textField.placeholder = placeHolder;
     textField.borderStyle = borderStyle;
     textField.contentVerticalAlignment = UIControlContentVerticalAlignmentCenter;
-    textField.delegate = self;
     textField.adjustsFontSizeToFitWidth = YES;
     textField.minimumFontSize = minFontSize;
+    textField.delegate = self;
 
     // Set the accessibility identifier so we can access these controls via automation
     textField.accessibilityIdentifier = [NSString stringWithFormat:@"textField_%ld", [_textFields count]];
 
     return textField;
+}
+
+- (void)dealloc {
 }
 
 - (void)viewDidLoad {
@@ -213,7 +216,7 @@ static const int TAG_SUBVIEW_UITEXTFIELD = 1;
                                            secureTextEntry:NO
                                                placeHolder:@"Press enter to dismiss keyboard"
                                               keyboardType:UIKeyboardTypeNamePhonePad
-                                               borderStyle:UIKeyboardTypePhonePad
+                                               borderStyle:UITextBorderStyleNone
                                              textAlignment:UITextBorderStyleLine
                                          spellCheckingType:UITextSpellCheckingTypeNo]];
 

@@ -16,5 +16,5 @@
 
 #import "MenuTableViewController.h"
 
-@interface UITextFieldWithControlsViewController : MenuTableViewController
+@interface UITextFieldWithControlsViewController : MenuTableViewController <UITextFieldDelegate>
 @end

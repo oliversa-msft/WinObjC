@@ -213,7 +213,7 @@ static const int TAG_SUBVIEW_UITEXTFIELD = 1;
                                            secureTextEntry:NO
                                                placeHolder:@"Press enter to dismiss keyboard"
                                               keyboardType:UIKeyboardTypeNamePhonePad
-                                               borderStyle:UIKeyboardTypePhonePad
+                                               borderStyle:UITextBorderStyleNone
                                              textAlignment:UITextBorderStyleLine
                                          spellCheckingType:UITextSpellCheckingTypeNo]];
 

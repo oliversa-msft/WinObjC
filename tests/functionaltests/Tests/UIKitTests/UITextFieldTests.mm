@@ -13,22 +13,13 @@
 // THE SOFTWARE.
 //
 //******************************************************************************
-#include <TestFramework.h>
+#import <TestFramework.h>
+#import "FunctionalTestHelpers.h"
+#import "UXTestHelpers.h"
 #import <UIKit/UITextField.h>
 
-#include <COMIncludes.h>
-#import <WRLHelpers.h>
-#import <ErrorHandling.h>
-#import <RawBuffer.h>
-#import <wrl/client.h>
-#import <wrl/implements.h>
-#import <wrl/async.h>
-#import <wrl/wrappers/corewrappers.h>
-#import <windows.foundation.h>
-#include <COMIncludes_end.h>
-
-#include "ObjCXamlControls.h"
-#import "UWP/WindowsUIXamlControls.h"
+// Re-use existing sample code for validation
+#import "UIKitControls/UITextFieldWithControlsViewController.h"
 
 class UITextFieldTests {
 public:
@@ -63,17 +54,9 @@ public:
         });
     }
 
-    TEST_METHOD(CheckWXCTextBlock) {
-        StrongId<WXCTextBlock> textBlock = [WXCTextBlock make];
-
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            [textBlock setText:@""];
-        });
-
-        [NSThread sleepForTimeInterval:.25];
-
-        dispatch_sync(dispatch_get_main_queue(), ^{
-            EXPECT_OBJCEQ([textBlock text], @"");
-        });
+    TEST_METHOD(ShowUITextFieldViewController) {
+        StrongId<UITextFieldWithControlsViewController> textFieldVC;
+        textFieldVC.attach([[UITextFieldWithControlsViewController alloc] init]);
+        UXTestAPI::ViewControllerPresenter testHelper(textFieldVC, 3.0f);
     }
 };

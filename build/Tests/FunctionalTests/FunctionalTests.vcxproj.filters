@@ -49,6 +49,9 @@
     <ClInclude Include="$(MSBuildThisFileDirectory)..\..\..\samples\XAMLCatalog\XAMLCatalog\UIKitControls\UIButtonWithControlsViewController.h">
       <Filter>Tests\ExternalUXResources</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\..\samples\XAMLCatalog\XAMLCatalog\UIKitControls\UITextFieldWithControlsViewController.h">
+      <Filter>Tests\ExternalUXResources</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="$(MSBuildThisFileDirectory)..\..\..\tests\functionaltests\FunctionalTests.cpp" />
@@ -140,6 +143,9 @@
       <Filter>Tests\ExternalUXResources</Filter>
     </ClangCompile>
     <ClangCompile Include="$(MSBuildThisFileDirectory)..\..\..\samples\XAMLCatalog\XAMLCatalog\UIKitControls\UIButtonWithControlsViewController.m">
+      <Filter>Tests\ExternalUXResources</Filter>
+    </ClangCompile>
+    <ClangCompile Include="..\..\..\samples\XAMLCatalog\XAMLCatalog\UIKitControls\UITextFieldWithControlsViewController.m">
       <Filter>Tests\ExternalUXResources</Filter>
     </ClangCompile>
   </ItemGroup>
