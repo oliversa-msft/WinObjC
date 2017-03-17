@@ -14,9 +14,7 @@
 //
 //******************************************************************************
 #include "XamlControls.h"
-
 #include "../UIKit.Xaml/ObjCXamlControls.h"
-
 #include "XamlUtilities.h"
 
 using namespace Microsoft::WRL;
@@ -105,6 +103,25 @@ WXCGrid* CreateLabel() {
 WXCTextBlock* GetLabelTextBlock(WXCGrid* labelGrid) {
     Microsoft::WRL::ComPtr<IInspectable> inspectable(XamlGetLabelTextBlock([labelGrid comObj]));
     return _createRtProxy([WXCTextBlock class], inspectable.Get());
+}
+
+////////////////////////////////////////////////////////////////////////////////////
+// TextField
+////////////////////////////////////////////////////////////////////////////////////
+WXCCanvas* CreateTextField() {
+    Microsoft::WRL::ComPtr<IInspectable> inspectable;
+    XamlCreateTextField(&inspectable);
+    return _createRtProxy([WXCCanvas class], inspectable.Get());
+}
+
+WXCTextBox* GetTextFieldTextBox(WXCCanvas* textField) {
+    Microsoft::WRL::ComPtr<IInspectable> inspectable(XamlGetTextFieldTextBox([textField comObj]));
+    return _createRtProxy([WXCTextBox class], inspectable.Get());
+}
+
+WXCPasswordBox* GetTextFieldPasswordBox(WXCCanvas* textField) {
+    Microsoft::WRL::ComPtr<IInspectable> inspectable(XamlGetTextFieldPasswordBox([textField comObj]));
+    return _createRtProxy([WXCPasswordBox class], inspectable.Get());
 }
 
 ////////////////////////////////////////////////////////////////////////////////////
