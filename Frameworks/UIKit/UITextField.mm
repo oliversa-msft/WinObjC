@@ -968,6 +968,13 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
         BOOL secureTextEntry = [coder decodeInt32ForKey:@"UISecureTextEntry"];
         [self _initUITextField:secureTextEntry];
 
+        // Font needs to be decoded first since setText will use the fontSize when adjusting
+        // the text to fit if required.
+        _font = [coder decodeObjectForKey:@"UIFont"];
+        if (_font == nil) {
+            _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
+        }
+
         self.text = [coder decodeObjectForKey:@"UIText"];
         self.placeholder = [coder decodeObjectForKey:@"UIPlaceholder"];
 
@@ -980,11 +987,6 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 
         // TODO: Investigate if this is correct
         self.backgroundColor = [UIColor lightGrayColor];
-
-        _font = [coder decodeObjectForKey:@"UIFont"];
-        if (_font == nil) {
-            _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
-        }
 
         _keyboardType = (UIKeyboardType)[coder decodeInt32ForKey:@"UIKeyboardType"];
         _backgroundImage = nil;
