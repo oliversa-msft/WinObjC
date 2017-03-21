@@ -124,8 +124,10 @@ WXCTextBlock* GetLabelTextBlock(WXCGrid* labelGrid);
 // TextField
 ////////////////////////////////////////////////////////////////////////////////////
 WXCCanvas* CreateTextField();
-WXCTextBox* GetTextFieldTextBox(WXCCanvas* textField);
-WXCPasswordBox* GetTextFieldPasswordBox(WXCCanvas* textField);
+WXCCanvas* GetTextFieldSubLayerCanvas(WXFrameworkElement* textField);
+WXCTextBox* GetTextFieldTextBox(WXFrameworkElement* textField);
+WXCPasswordBox* GetTextFieldPasswordBox(WXFrameworkElement* textField);
+void SetTextFieldSecureTextEntryValue(WXFrameworkElement* textField, bool secureTextEntry);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // CoreAnimation Layer Support

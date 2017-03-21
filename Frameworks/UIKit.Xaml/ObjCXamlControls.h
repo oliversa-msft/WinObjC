@@ -107,11 +107,17 @@ UIKIT_XAML_EXPORT void XamlCreateSlider(IInspectable** created);
 // Returns a UIKit::Xaml::TextField as an IInspectable
 UIKIT_XAML_EXPORT void XamlCreateTextField(IInspectable** created);
 
+// Returns the UIKit::Xaml::TextField's backing Canvas as an IInspectable
+UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldSubLayerCanvas(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField);
+
 // Retrieves the UIKit::Xaml::TextField's backing TextBox as an IInspectable
-UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldTextBox(const Microsoft::WRL::ComPtr<IInspectable>& textField);
+UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldTextBox(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField);
 
 // Retrieves the UIKit::Xaml::TextField's backing PasswordBox as an IInspectable
-UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldPasswordBox(const Microsoft::WRL::ComPtr<IInspectable>& textField);
+UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldPasswordBox(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField);
+
+// Toggle the secure text entry value allowing the switch to either the TextBox or PasswordBox backing element
+UIKIT_XAML_EXPORT void XamlSetTextFieldSecureTextEntryValue(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField, bool secureTextEntry);
 
 ////////////////////////////////////////////////////////////////////////////////////
 // ContentDialog.xaml.cpp

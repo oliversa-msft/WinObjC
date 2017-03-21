@@ -49,6 +49,8 @@ public:
     // Accessor for the LayerProperty that manages the BorderThickness of this TextField
     virtual Private::CoreAnimation::LayerProperty^ GetBorderThicknessProperty();
 
+    void SetSecureTextEntryValue(bool secureTextEntry);
+
 internal:
     property Windows::UI::Xaml::Controls::TextBox^ TextBox {
         Windows::UI::Xaml::Controls::TextBox^ get();
@@ -57,6 +59,10 @@ internal:
     property Windows::UI::Xaml::Controls::PasswordBox^ PasswordBox {
         Windows::UI::Xaml::Controls::PasswordBox^ get();
     }
+
+private:
+    // Layer elements; created on demand
+    Windows::UI::Xaml::Controls::Image^ _content;
 };
 
 } /* Xaml*/

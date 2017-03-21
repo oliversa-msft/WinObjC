@@ -114,14 +114,23 @@ WXCCanvas* CreateTextField() {
     return _createRtProxy([WXCCanvas class], inspectable.Get());
 }
 
-WXCTextBox* GetTextFieldTextBox(WXCCanvas* textField) {
+WXCCanvas* GetTextFieldSubLayerCanvas(WXFrameworkElement* textField) {
+    Microsoft::WRL::ComPtr<IInspectable> inspectable(XamlGetTextFieldSubLayerCanvas([textField comObj]));
+    return _createRtProxy([WXCCanvas class], inspectable.Get());
+}
+
+WXCTextBox* GetTextFieldTextBox(WXFrameworkElement* textField) {
     Microsoft::WRL::ComPtr<IInspectable> inspectable(XamlGetTextFieldTextBox([textField comObj]));
     return _createRtProxy([WXCTextBox class], inspectable.Get());
 }
 
-WXCPasswordBox* GetTextFieldPasswordBox(WXCCanvas* textField) {
+WXCPasswordBox* GetTextFieldPasswordBox(WXFrameworkElement* textField) {
     Microsoft::WRL::ComPtr<IInspectable> inspectable(XamlGetTextFieldPasswordBox([textField comObj]));
     return _createRtProxy([WXCPasswordBox class], inspectable.Get());
+}
+
+void SetTextFieldSecureTextEntryValue(WXFrameworkElement* textField, bool secureTextEntry) {
+    XamlSetTextFieldSecureTextEntryValue([textField comObj], secureTextEntry);
 }
 
 ////////////////////////////////////////////////////////////////////////////////////

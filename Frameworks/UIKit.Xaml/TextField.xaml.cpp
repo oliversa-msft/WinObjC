@@ -30,27 +30,29 @@ namespace Xaml {
 
 TextField::TextField() {
     InitializeComponent();
-
-    SetValue(UIKit::Xaml::Private::CoreAnimation::Layer::LayerContentProperty, LayerContentImage);
-    SetValue(UIKit::Xaml::Private::CoreAnimation::Layer::SublayerCanvasProperty, this);
-
-    Name = L"TextField";
 }
 
 // Accessor for our Layer content
 Image^ TextField::LayerContent::get() {
-    return LayerContentImage;
+    if (!_content) {
+        _content = ref new Image();
+        _content->Name = "LayerContent";
+
+        // Layer content is behind any sublayers
+        textFieldCanvas->Children->InsertAt(0, _content);
+    }
+
+    return _content;
 }
 
 // Accessor for our Layer content
 bool TextField::HasLayerContent::get() {
-    return true;
+    return _content != nullptr;
 }
 
 // Accessor for our SublayerCanvas
 Canvas^ TextField::SublayerCanvas::get() {
-    // We *are* the sublayer canvas
-    return this;
+    return textFieldCanvas;
 }
 
 // Accessor for the LayerProperty that manages the BorderBrush of this TextField
@@ -63,6 +65,14 @@ Private::CoreAnimation::LayerProperty^ TextField::GetBorderThicknessProperty() {
     return nullptr;
 }
 
+void TextField::SetSecureTextEntryValue(bool secureTextEntry) {
+    // Need to remove const-ness while also converting it to Control^
+    Control^ control = dynamic_cast<Control^>(this);
+    if (control) {
+        VisualStateManager::GoToState(control, secureTextEntry ? "PasswordBoxVisible" : "TextBoxVisible", false);
+    }
+}
+
 TextBox^ TextField::TextBox::get() {
     return textFieldTB;
 }
@@ -70,6 +80,39 @@ TextBox^ TextField::TextBox::get() {
 PasswordBox^ TextField::PasswordBox::get() {
     return textFieldPB;
 }
+
+///////////////////////////////////////////////////////////////
+// Dependency Properties
+///////////////////////////////////////////////////////////////
+
+/*
+DependencyProperty^ TextField::IsSecureTextEntryDependencyProperty = nullptr;
+
+void TextField::RegisterDependencyProperties()
+{
+    IsSecureTextEntryDependencyProperty = DependencyProperty::Register(
+        "IsSecureTextEntry",
+        Platform::Boolean::typeid,
+        TextField::typeid,
+        nullptr);
+}
+
+void TextField::UnregisterDependencyProperties() {
+    IsSecureTextEntryDependencyProperty = nullptr;
+}
+
+DependencyProperty^ TextField::IsSecureTextEntryProperty::get() {
+    return TextField::IsSecureTextEntryDependencyProperty;
+}
+
+Platform::Boolean TextField::IsSecureTextEntry::get() {
+    return safe_cast<Platform::Boolean>(GetValue(IsSecureTextEntryProperty));
+}
+
+void TextField::IsSecureTextEntry::set(Platform::Boolean isSecureTextEntry) {
+    SetValue(IsSecureTextEntryProperty, isSecureTextEntry);
+}
+*/
 
 } /* Xaml*/
 } /* UIKit*/
@@ -84,14 +127,26 @@ UIKIT_XAML_EXPORT void XamlCreateTextField(IInspectable** created) {
     *created = inspectable.Detach();
 }
 
+// Returns a UIKit::Xaml::TextField's backing Canvas as an IInspectable
+UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldSubLayerCanvas(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField) {
+    auto textField = safe_cast<UIKit::Xaml::TextField^>(reinterpret_cast<Platform::Object^>(inspectableTextField.Get()));
+    return InspectableFromObject(textField->SublayerCanvas).Detach();
+}
+
 // Retrieves the UIKit::Xaml::TextField's backing TextBox as an IInspectable
-UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldTextBox(const Microsoft::WRL::ComPtr<IInspectable>& TextField) {
-    auto textField = safe_cast<UIKit::Xaml::TextField^>(reinterpret_cast<Platform::Object^>(TextField.Get()));
+UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldTextBox(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField) {
+    auto textField = safe_cast<UIKit::Xaml::TextField^>(reinterpret_cast<Platform::Object^>(inspectableTextField.Get()));
     return InspectableFromObject(textField->TextBox).Detach();
 }
 
 // Retrieves the UIKit::Xaml::TextField's backing PasswordBox as an IInspectable
-UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldPasswordBox(const Microsoft::WRL::ComPtr<IInspectable>& TextField) {
-    auto textField = safe_cast<UIKit::Xaml::TextField^>(reinterpret_cast<Platform::Object^>(TextField.Get()));
+UIKIT_XAML_EXPORT IInspectable* XamlGetTextFieldPasswordBox(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField) {
+    auto textField = safe_cast<UIKit::Xaml::TextField^>(reinterpret_cast<Platform::Object^>(inspectableTextField.Get()));
     return InspectableFromObject(textField->PasswordBox).Detach();
+}
+
+// Set the UIKit::Xaml::TextField's secureTextEntry property
+UIKIT_XAML_EXPORT void XamlSetTextFieldSecureTextEntryValue(const Microsoft::WRL::ComPtr<IInspectable>& inspectableTextField, bool secureTextEntry) {
+    auto textField = safe_cast<UIKit::Xaml::TextField^>(reinterpret_cast<Platform::Object^>(inspectableTextField.Get()));
+    textField->SetSecureTextEntryValue(secureTextEntry);
 }

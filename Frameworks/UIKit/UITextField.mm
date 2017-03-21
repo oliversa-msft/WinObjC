@@ -72,7 +72,7 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
     BOOL _adjustsFontSizeToFitWidth;
 
     // backing xaml textbox and passwordBox
-    StrongId<WXCCanvas> _textField; // Backing xaml element
+    StrongId<WXFrameworkElement> _textField; // Backing user control
     StrongId<WXCTextBox> _textBox; // Backing xaml textbox
     StrongId<WXCPasswordBox> _passwordBox; // Backing xaml passwordbox
     StrongId<WXCControl> _textContentElement; // ContentElement from the TextBox template to calculate width
@@ -939,14 +939,14 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (void)setSecureTextEntry:(BOOL)secure {
     [_secureModeLock lock];
     if (_secureTextMode != secure) {
-        // TODO: Toggle the secure mode on the text field using UIKit.Xaml property
-        if (secure) {
-            [self _initPasswordBox];
-        } else {
-            [self _initTextBox];
-        }
-
+        XamlControls::SetTextFieldSecureTextEntryValue(_textField, secure);
         _secureTextMode = secure;
+
+        if (secure) {
+            [self _switchToPasswordBox];
+        } else {
+            [self _switchToTextBox];
+        }
     }
     [_secureModeLock unlock];
 }
@@ -965,26 +965,28 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (instancetype)initWithCoder:(NSCoder*)coder {
     if (self = [super initWithCoder:coder]) {
         // move to top so that setting properties below can happen on xamlElement
-        [self _initUITextField];
+        BOOL secureTextEntry = [coder decodeInt32ForKey:@"UISecureTextEntry"];
+        [self _initUITextField:secureTextEntry];
 
-        _font = [coder decodeObjectForKey:@"UIFont"];
-        self.textAlignment = (UITextAlignment)[coder decodeInt32ForKey:@"UITextAlignment"];
-        self.borderStyle = (UITextBorderStyle)[coder decodeInt32ForKey:@"UIBorderStyle"];
-        _keyboardType = (UIKeyboardType)[coder decodeInt32ForKey:@"UIKeyboardType"];
-        _secureTextMode = [coder decodeInt32ForKey:@"UISecureTextEntry"];
         self.text = [coder decodeObjectForKey:@"UIText"];
         self.placeholder = [coder decodeObjectForKey:@"UIPlaceholder"];
-        UIColor* textColor = [coder decodeObjectForKey:@"UITextColor"];
-        if (textColor == nil) {
-            textColor = [UIColor blackColor];
-        }
-        self.textColor = textColor;
 
+        self.textAlignment = (UITextAlignment)[coder decodeInt32ForKey:@"UITextAlignment"];
+        self.borderStyle = (UITextBorderStyle)[coder decodeInt32ForKey:@"UIBorderStyle"];
+        self.textColor = [coder decodeObjectForKey:@"UITextColor"];
+        if (self.textColor == nil) {
+            self.textColor = [UIColor blackColor];
+        }
+
+        // TODO: Investigate if this is correct
+        self.backgroundColor = [UIColor lightGrayColor];
+
+        _font = [coder decodeObjectForKey:@"UIFont"];
         if (_font == nil) {
             _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
         }
 
-        self.backgroundColor = [UIColor lightGrayColor];
+        _keyboardType = (UIKeyboardType)[coder decodeInt32ForKey:@"UIKeyboardType"];
         _backgroundImage = nil;
         _isFirstResponder = NO;
 
@@ -1000,15 +1002,15 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 - (instancetype)initWithFrame:(CGRect)frame {
     if (self = [super initWithFrame:frame]) {
         // move to top so that setting properties below can happen on xamlElement
-        [self _initUITextField];
+        [self _initUITextField:NO];
 
         // TODO: Remove duplicate code from here and the initWithFrame:xamlElement: implementation.
-        _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
         self.textAlignment = UITextAlignmentLeft;
         self.borderStyle = UITextBorderStyleNone;
-        _secureTextMode = NO;
         self.textColor = [UIColor blackColor];
         self.backgroundColor = [UIColor lightGrayColor];
+
+        _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
         _backgroundImage = nil;
         _spellCheckingType = UITextSpellCheckingTypeDefault;
         _isFirstResponder = NO;
@@ -1018,17 +1020,16 @@ NSString* const UITextFieldTextDidEndEditingNotification = @"UITextFieldTextDidE
 }
 
 - (id)initWithFrame:(CGRect)frame xamlElement:(WXFrameworkElement*)xamlElement {
-    // TODO: We're passing nil to initWithFrame:xamlElement: because we have to *contain* either a TextBox or a PasswordBox.
     if (self = [super initWithFrame:frame xamlElement:xamlElement]) {
         // move to top so that setting properties below can happen on xamlElement
-        [self _initUITextField];
+        [self _initUITextField:NO];
 
-        _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
         self.textAlignment = UITextAlignmentLeft;
         self.borderStyle = UITextBorderStyleNone;
-        _secureTextMode = NO;
         self.textColor = [UIColor blackColor];
         self.backgroundColor = [UIColor lightGrayColor];
+
+        _font = [UIFont fontWithName:@"Segoe UI" size:[UIFont labelFontSize]];
         _backgroundImage = nil;
         _spellCheckingType = UITextSpellCheckingTypeDefault;
         _isFirstResponder = NO;
@@ -1332,12 +1333,11 @@ Microsoft Extension
 }
 
 // Helper to initialize textbox
-- (void)_initTextBox {
-    // Toggle appropriate visibilty of the backing XAML elements
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _textBox.visibility = WXVisibilityVisible;
-        _passwordBox.visibility = WXVisibilityCollapsed;
-    });
+- (void)_switchToTextBox {
+    _textBox = XamlControls::GetTextFieldTextBox(_textField);
+    if (!_textBox) {
+        FAIL_FAST();
+    }
 
     // if passwordbox exists, need to transfer the properties that we set on passwordbox to textbox
     if (_passwordBox != nil) {
@@ -1356,9 +1356,6 @@ Microsoft Extension
         _textBox.text = self.text;
         _textBox.placeholderText = self.placeholder;
         _textBox.isSpellCheckEnabled = (self.spellCheckingType == UITextSpellCheckingTypeYes);
-
-        // clean up passwordbox after transfering the properties
-        //_passwordBox = nil;
     }
 
     // setting up addtional textbox properties in loaded listener that requires looking into control template
@@ -1404,12 +1401,11 @@ Microsoft Extension
 }
 
 // Helper to Initialize passwordBox
-- (void)_initPasswordBox {
-    // Toggle appropriate visibilty of the backing XAML elements
-    dispatch_async(dispatch_get_main_queue(), ^{
-        _textBox.visibility = WXVisibilityCollapsed;
-        _passwordBox.visibility = WXVisibilityVisible;
-    });
+- (void)_switchToPasswordBox {
+    _passwordBox = XamlControls::GetTextFieldPasswordBox(_textField);
+    if (!_passwordBox) {
+        FAIL_FAST();
+    }
 
     // set up focus and keydown handlers
     [self _setupControlGotFocusHandler:_passwordBox];
@@ -1439,12 +1435,8 @@ Microsoft Extension
         });
 
         _passwordBox.inputScope = XamlUtilities::ConvertKeyboardTypeToInputScope(_keyboardType, YES);
-
         _passwordBox.password = self.text;
         _passwordBox.placeholderText = self.placeholder;
-
-        // clean up textbox after transfering the properties
-        //_textBox = nil;
     }
 
     // set up password change handler
@@ -1484,32 +1476,24 @@ Microsoft Extension
 }
 
 // Main entrance to initialize TextField
-- (void)_initUITextField {
+- (void)_initUITextField:(BOOL)secureTextMode {
     _secureModeLock = [NSRecursiveLock new];
 
-    _textField = rt_dynamic_cast<WXCCanvas>([self xamlElement]);
+    _textField = rt_dynamic_cast<WXFrameworkElement>([self xamlElement]);
     if (!_textField) {
         // Definitely didn't receive any supported backing XAML elements
         FAIL_FAST();
     }
 
-    // TODO: Remove these once we adopt deferred controls and only require setting the secureTextEntry boolean
-    _textBox = XamlControls::GetTextFieldTextBox(_textField);
-    if (!_textBox) {
-        // Definitely didn't receive any supported backing XAML elements
-        FAIL_FAST();
-    }
+    // Initially both controls can be lazy loaded, we instantiate the appropriate control
+    // at runtime based on the secureTextEntry value
+    XamlControls::SetTextFieldSecureTextEntryValue(_textField, secureTextMode);
 
-    _passwordBox = XamlControls::GetTextFieldPasswordBox(_textField);
-    if (!_passwordBox) {
-        // Definitely didn't receive any supported backing XAML elements
-        FAIL_FAST();
-    }
-
+    _secureTextMode = secureTextMode;
     if (_secureTextMode) {
-        [self _initPasswordBox];
+        [self _switchToPasswordBox];
     } else {
-        [self _initTextBox];
+        [self _switchToTextBox];
     }
 }
 
